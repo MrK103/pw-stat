@@ -1,6 +1,7 @@
 package by.mrk.pwstat.service.impl;
 
 import by.mrk.pwstat.dto.ClanDTO;
+import by.mrk.pwstat.dto.PCDTO;
 import by.mrk.pwstat.dto.StatisticDTO;
 import by.mrk.pwstat.dto.TopDTO;
 import by.mrk.pwstat.entity.enums.PointEnum;
@@ -69,6 +70,14 @@ public class StaticServiceImpl implements StaticService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<PCDTO> getPCStat() {
+        var pcList = topRepository.getTop20Users();
+        return pcList.stream().map(pc -> new PCDTO(pc.getRolename(), "Хз где лежат", pc.getRolelevel(), pc.getPk_count(),
+                makeReadableTime(Long.valueOf(pc.getPinknametime())), makeReadableTime(pc.getTimeused()))).collect(Collectors.toList());
+    }
+
+
     private String getFactionName(Integer clanId) {
         if (clanId == 0) {
             return "-";
@@ -77,4 +86,9 @@ public class StaticServiceImpl implements StaticService {
             return clanRepository.getClanNameById(clanId);
         }
     }
+
+    private String makeReadableTime(Long sec) {
+        return String.format("%d:%02d:%02d", sec / 3600, sec % 3600 / 60, sec % 60);
+    }
+
 }

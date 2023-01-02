@@ -1,6 +1,7 @@
 package by.mrk.pwstat.controller;
 
 import by.mrk.pwstat.dto.ClanDTO;
+import by.mrk.pwstat.dto.PCDTO;
 import by.mrk.pwstat.dto.StatisticDTO;
 import by.mrk.pwstat.dto.TopDTO;
 import by.mrk.pwstat.service.StaticService;
@@ -34,6 +35,12 @@ public class StaticController {
     @GetMapping("/getClanStat")
     public ResponseEntity<List<ClanDTO>> getClanStat() {
         var statistic = service.getClanStat();
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
+    }
+
+    @GetMapping("/getPCStat")
+    public ResponseEntity<List<PCDTO>> getPCStat() {
+        var statistic = service.getPCStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 }
