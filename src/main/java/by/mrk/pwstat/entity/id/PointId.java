@@ -1,4 +1,4 @@
-package by.mrk.entity;
+package by.mrk.pwstat.entity.id;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

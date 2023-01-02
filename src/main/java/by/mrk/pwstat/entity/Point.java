@@ -1,5 +1,6 @@
-package by.mrk.entity;
+package by.mrk.pwstat.entity;
 
+import by.mrk.pwstat.entity.id.PointId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

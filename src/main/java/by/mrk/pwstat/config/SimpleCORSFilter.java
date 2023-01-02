@@ -1,2 +1,29 @@
-package by.mrk.pwstat.config;public class SimpleCorseFilter {
+package by.mrk.pwstat.config;
+
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class SimpleCORSFilter implements Filter {
+
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        //todo доступ из вне, поменять на url сайта
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+        System.out.println("im there");
+        chain.doFilter(req, res);
+        System.out.println("some broken");
+
+    }
+
+    public void init(FilterConfig filterConfig) {}
+
+    public void destroy() {}
+
 }
