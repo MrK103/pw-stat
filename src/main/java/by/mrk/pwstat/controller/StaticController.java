@@ -1,9 +1,6 @@
 package by.mrk.pwstat.controller;
 
-import by.mrk.pwstat.dto.ClanDTO;
-import by.mrk.pwstat.dto.PCDTO;
-import by.mrk.pwstat.dto.StatisticDTO;
-import by.mrk.pwstat.dto.TopDTO;
+import by.mrk.pwstat.dto.*;
 import by.mrk.pwstat.service.StaticService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +38,12 @@ public class StaticController {
     @GetMapping("/getPCStat")
     public ResponseEntity<List<PCDTO>> getPCStat() {
         var statistic = service.getPCStat();
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
+    }
+
+    @GetMapping("/getDonateTop")
+    public ResponseEntity<List<DonateDTO>> getDonateTop() {
+        var statistic = service.getDonateStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 }

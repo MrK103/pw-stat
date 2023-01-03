@@ -3,7 +3,9 @@ package by.mrk.pwstat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 
@@ -23,7 +25,11 @@ public class Top {
     private Byte rolegender;
     private Byte roleprof;
     private Integer rednametime;
-    private Integer factionid;
+    @ManyToOne()
+    @JoinColumn(name = "factionid", referencedColumnName = "id")
+//    @Fetch(value = FetchMode.JOIN)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Clan factionid;
     private Short factionrole;
     private Integer pinknametime;
     private Short level2;
@@ -38,5 +44,6 @@ public class Top {
     private Integer goldused;
     private Integer pk_count;
     private Integer task_count;
+
 
 }

@@ -1,9 +1,6 @@
 package by.mrk.pwstat.service;
 
-import by.mrk.pwstat.dto.ClanDTO;
-import by.mrk.pwstat.dto.PCDTO;
-import by.mrk.pwstat.dto.StatisticDTO;
-import by.mrk.pwstat.dto.TopDTO;
+import by.mrk.pwstat.dto.*;
 
 import java.util.List;
 
@@ -16,4 +13,6 @@ public interface StaticService {
     List<TopDTO> getTop();
 
     List<PCDTO> getPCStat();
+
+    List<DonateDTO> getDonateStat();
 }

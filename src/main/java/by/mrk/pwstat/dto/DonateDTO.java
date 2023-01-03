@@ -5,12 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class TopDTO {
-
+public class DonateDTO {
     private String userName;
-    private Integer level;
-    private String clan;
-    private Integer isOnline;
-    private Integer killWhite;
-
+    private Integer money;
 }

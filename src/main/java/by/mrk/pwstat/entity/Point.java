@@ -1,10 +1,7 @@
 package by.mrk.pwstat.entity;
 
 import by.mrk.pwstat.entity.id.PointId;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "point")
 public class Point {
@@ -23,11 +21,11 @@ public class Point {
     @EmbeddedId
     private PointId pointId;
     @Column(name = "time")
-    private int time;
+    private Integer time;
     @Column(name = "zoneid")
-    private int zoneId;
+    private Integer zoneId;
     @Column(name = "zonelocalid")
-    private int zoneLocalId;
+    private Integer zoneLocalId;
     @Column(name = "accountstart")
     private LocalDateTime accountStart;
     @Column(name = "lastlogin")
