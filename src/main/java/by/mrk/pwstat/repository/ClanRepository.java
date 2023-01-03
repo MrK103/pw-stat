@@ -11,9 +11,7 @@ public interface ClanRepository extends JpaRepository<Clan, Integer> {
     @Query(value = "SELECT count (u.id) FROM Clan u")
     Integer getAllCount();
 
-    @Query(value = "SELECT * FROM klan k  ORDER BY k.level desc LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM klan k  ORDER BY k.level desc LIMIT 20", nativeQuery = true)
     List<Clan> getTopTenClans();
 
-    @Query(value = "SELECT u.name FROM Clan u WHERE u.id = :id")
-    String getClanNameById(@Param("id") Integer id);
 }

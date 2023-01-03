@@ -15,4 +15,6 @@ public interface StaticService {
     List<PCDTO> getPCStat();
 
     List<DonateDTO> getDonateStat();
+
+    List<MemberClanDTO> getMembers(String nameClan);
 }

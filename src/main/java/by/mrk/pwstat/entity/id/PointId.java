@@ -14,6 +14,8 @@ import java.io.Serializable;
 public class PointId implements Serializable {
     private int uid;
 
+    private Integer aid;
+
     @Override
     public String toString() {
         return "PointId{" +
@@ -21,7 +23,5 @@ public class PointId implements Serializable {
                 ", aid=" + aid +
                 '}';
     }
-
-    private Integer aid;
 }
 

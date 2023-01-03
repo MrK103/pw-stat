@@ -3,6 +3,8 @@ package by.mrk.pwstat.service.impl;
 import by.mrk.pwstat.dto.*;
 import by.mrk.pwstat.entity.*;
 import by.mrk.pwstat.entity.enums.PointEnum;
+import by.mrk.pwstat.entity.enums.RoleClanEnum;
+import by.mrk.pwstat.entity.enums.RoleProfEnum;
 import by.mrk.pwstat.entity.id.PointId;
 import by.mrk.pwstat.repository.*;
 import by.mrk.pwstat.service.StaticService;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -112,13 +114,28 @@ public class StaticServiceImpl implements StaticService {
 
     }
 
+    @Override
+    public List<MemberClanDTO> getMembers(String nameClan){
+        var membersFromBD = topRepository.findAllByFactionName(nameClan);
+
+        return membersFromBD.stream().map(members -> new MemberClanDTO(
+                members.getRolename(),
+                members.getRolelevel(),
+                Arrays.stream(RoleClanEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(members.getFactionrole()))).findFirst().get().getName(),
+                Arrays.stream(RoleProfEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(members.getRoleprof()))).findFirst().get().getName(),
+                members.getHp(),
+                members.getMp(),
+                members.getPk_count()
+                )).collect(Collectors.toList());
+     }
+
     private String makeReadableTime(Long sec) {
         return String.format("%d:%02d:%02d", sec / 3600, sec % 3600 / 60, sec % 60);
     }
 
 //    @PostConstruct
 //    void test() {
-//        getDonateStat();
+//    getMembers("ежата");
 //    }
 
 }

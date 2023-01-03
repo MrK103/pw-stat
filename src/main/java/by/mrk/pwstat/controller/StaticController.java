@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +41,12 @@ public class StaticController {
         var statistic = service.getPCStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
-
+    @GetMapping("/getMembers/{id}")
+    public ResponseEntity<List<MemberClanDTO>> getPCStat(@PathVariable("id") String id) {
+        System.out.println(id);
+        var statistic = service.getMembers(id);
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
+    }
     @GetMapping("/getDonateTop")
     public ResponseEntity<List<DonateDTO>> getDonateTop() {
         var statistic = service.getDonateStat();
