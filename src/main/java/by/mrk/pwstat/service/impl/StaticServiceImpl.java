@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional()
 @AllArgsConstructor
 public class StaticServiceImpl implements StaticService {
     private final UserRepository userRepository;
@@ -35,7 +35,7 @@ public class StaticServiceImpl implements StaticService {
 
         var clans = clanRepository.getAllCount();
         var online = pointRepository.online(PointEnum.ONLINE.getId());
-        var topList = topRepository.findAllQ();
+        var topList = topRepository.findAll();
 
         System.out.println(topList.size());
         Map<String, Long> roles = new LinkedHashMap<>();
@@ -82,12 +82,13 @@ public class StaticServiceImpl implements StaticService {
     public List<TopDTO> getTop() {
 //        var start = Instant.now();
 
-        var topUser = topRepository.getAll().stream().limit(20).collect(Collectors.toList());
+        var topUser = topRepository.findAllQ();
         var pointIds = topUser.stream().map(top -> new PointId(top.getUserid(), 1)).collect(Collectors.toList());
         var points = pointRepository.findAllById(pointIds);
+
         var userOnline = points.stream().parallel().collect(Collectors.toMap(
                 key -> key.getPointId().getUid(),
-                point -> Optional.ofNullable(point.getZoneId()).orElse(0)));
+                point -> Optional.ofNullable(point.getZoneId()).orElse(PointEnum.OFFLINE.getId())));
 
         Map<Top, Integer> maps = new LinkedHashMap<>();
         for (int i = 0; i < 20; i++) {
@@ -96,11 +97,14 @@ public class StaticServiceImpl implements StaticService {
 //        var finish = Instant.now();
 //        var elapsed = Duration.between(start, finish).toMillis();
 //        System.err.println("Прошло времени, мс: " + elapsed);
+
+        var clans = clanRepository.findAllById(topUser.stream().map(Top::getFactionid).collect(Collectors.toList()));
         return maps.entrySet().stream().map(top ->
-                new TopDTO(top.getKey().getRolename(),
+                new TopDTO(
+                        top.getKey().getRolename(),
                         top.getKey().getRolelevel(),
                         Arrays.stream(RoleProfEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(top.getKey().getRoleprof()))).findFirst().get().getName(),
-                        top.getKey().getFactionid().getName(),
+                        clans.stream().filter(clan -> clan.getId().equals(top.getKey().getFactionid())).findAny().orElse(new Clan()).getName(),
                         top.getValue(),
                         top.getKey().getPk_count())
         ).collect(Collectors.toList());
@@ -109,8 +113,8 @@ public class StaticServiceImpl implements StaticService {
     @Override
     public List<PCDTO> getPCStat() {
 
-        var pcList = topRepository.getAll();
-        return pcList.stream().limit(20).map(pc -> new PCDTO(
+        var pcList = topRepository.findAllQ();
+        return pcList.stream().map(pc -> new PCDTO(
                         pc.getRolename(),
                         Arrays.stream(RoleProfEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(pc.getRoleprof()))).findFirst().get().getName(),
                         pc.getRolelevel(),
@@ -141,8 +145,13 @@ public class StaticServiceImpl implements StaticService {
 
     @Override
     public List<MemberClanDTO> getMembers(String nameClan) {
-        var membersFromBD = topRepository.findAllByFactionName(nameClan);
-
+        System.out.println(nameClan);
+        List<Top> membersFromBD;
+        if (Objects.equals(nameClan, "hash34754567976567")) {
+            membersFromBD = topRepository.findAllByFactionId(0);
+        } else {
+            membersFromBD = topRepository.findAllByFactionName(nameClan);
+        }
         return membersFromBD.stream().map(members -> new MemberClanDTO(
                 members.getRolename(),
                 members.getRolelevel(),
@@ -158,9 +167,10 @@ public class StaticServiceImpl implements StaticService {
         return String.format("%d:%02d:%02d", sec / 3600, sec % 3600 / 60, sec % 60);
     }
 
-//    @PostConstruct
-//    void test() {
-//    getMembers("ежата");
-//    }
+    @PostConstruct
+    void test() {
+        var test = getMembers("ежата");
+        test.forEach(t -> System.out.println(t.getName()));
+    }
 
 }

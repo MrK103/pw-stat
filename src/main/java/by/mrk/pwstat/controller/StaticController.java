@@ -43,7 +43,6 @@ public class StaticController {
     }
     @GetMapping("/getMembers/{id}")
     public ResponseEntity<List<MemberClanDTO>> getPCStat(@PathVariable("id") String id) {
-        System.out.println(id);
         var statistic = service.getMembers(id);
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }

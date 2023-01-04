@@ -2,7 +2,7 @@ package by.mrk.pwstat.entity.enums;
 
 public enum PointEnum {
     ONLINE(1),
-    OFFLINE(2);
+    OFFLINE(0);
 
     private final Integer id;
     PointEnum(Integer id) {

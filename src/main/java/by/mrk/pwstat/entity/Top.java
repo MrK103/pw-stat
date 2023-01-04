@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+
 
 import javax.persistence.*;
 
@@ -27,11 +24,11 @@ public class Top {
     private Byte rolegender;
     private Byte roleprof;
     private Integer rednametime;
-    @ManyToOne()
-    @JoinColumn(name = "factionid", referencedColumnName = "id")
-    @Fetch(value = FetchMode.JOIN)
-    @NotFound(action = NotFoundAction.IGNORE)
-    private Clan factionid;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "factionid", referencedColumnName = "id")
+////    @Fetch(value = FetchMode.JOIN)
+//    @NotFound(action = NotFoundAction.IGNORE)
+    private Integer factionid;
     private Short factionrole;
     private Integer pinknametime;
     private Short level2;
