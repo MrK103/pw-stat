@@ -32,13 +32,37 @@ public class StaticServiceImpl implements StaticService {
     @Override
     public StatisticDTO getStatistic() {
         var acc = userRepository.getAllCount();
+
         var clans = clanRepository.getAllCount();
         var online = pointRepository.online(PointEnum.ONLINE.getId());
-        var genderList = topRepository.getGenderList();
+        var topList = topRepository.findAllQ();
+
+        System.out.println(topList.size());
+        Map<String, Long> roles = new LinkedHashMap<>();
+
+        roles.put(RoleProfEnum.CLASS_0.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_0.getId())).count());
+        roles.put(RoleProfEnum.CLASS_1.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_1.getId())).count());
+        roles.put(RoleProfEnum.CLASS_2.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_2.getId())).count());
+        roles.put(RoleProfEnum.CLASS_3.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_3.getId())).count());
+        roles.put(RoleProfEnum.CLASS_4.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_4.getId())).count());
+        roles.put(RoleProfEnum.CLASS_5.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_5.getId())).count());
+        roles.put(RoleProfEnum.CLASS_6.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_6.getId())).count());
+        roles.put(RoleProfEnum.CLASS_7.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_7.getId())).count());
+        roles.put(RoleProfEnum.CLASS_8.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_8.getId())).count());
+        roles.put(RoleProfEnum.CLASS_9.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_9.getId())).count());
+        roles.put(RoleProfEnum.CLASS_10.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_10.getId())).count());
+        roles.put(RoleProfEnum.CLASS_11.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_11.getId())).count());
+        roles.put(RoleProfEnum.CLASS_12.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_12.getId())).count());
+        roles.put(RoleProfEnum.CLASS_13.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_13.getId())).count());
+        roles.put(RoleProfEnum.CLASS_14.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_14.getId())).count());
+
+
+        var genderList = topList.stream().map(Top::getRolegender).collect(Collectors.toList());
         var female = genderList.stream().filter(p -> p == 1).count();
         var male = genderList.stream().filter(p -> p == 0).count();
+        var countRoles = topList.size();
 
-        return new StatisticDTO(acc, clans, online, female, male);
+        return new StatisticDTO(acc, clans, online, female, male, countRoles, roles);
     }
 
     @Override
@@ -73,11 +97,12 @@ public class StaticServiceImpl implements StaticService {
 //        var elapsed = Duration.between(start, finish).toMillis();
 //        System.err.println("Прошло времени, мс: " + elapsed);
         return maps.entrySet().stream().map(top ->
-            new TopDTO(top.getKey().getRolename(),
-                    top.getKey().getRolelevel(),
-                    top.getKey().getFactionid().getName(),
-                    top.getValue(),
-                    top.getKey().getPk_count())
+                new TopDTO(top.getKey().getRolename(),
+                        top.getKey().getRolelevel(),
+                        Arrays.stream(RoleProfEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(top.getKey().getRoleprof()))).findFirst().get().getName(),
+                        top.getKey().getFactionid().getName(),
+                        top.getValue(),
+                        top.getKey().getPk_count())
         ).collect(Collectors.toList());
     }
 
@@ -86,12 +111,12 @@ public class StaticServiceImpl implements StaticService {
 
         var pcList = topRepository.getAll();
         return pcList.stream().limit(20).map(pc -> new PCDTO(
-                pc.getRolename(),
-                "Хз где лежат",
-                pc.getRolelevel(),
-                pc.getPk_count(),
-                makeReadableTime(Long.valueOf(pc.getPinknametime())),
-                makeReadableTime(pc.getTimeused())))
+                        pc.getRolename(),
+                        Arrays.stream(RoleProfEnum.values()).filter(t -> t.getId().equals(Integer.valueOf(pc.getRoleprof()))).findFirst().get().getName(),
+                        pc.getRolelevel(),
+                        pc.getPk_count(),
+                        makeReadableTime(Long.valueOf(pc.getPinknametime())),
+                        makeReadableTime(pc.getTimeused())))
                 .collect(Collectors.toList());
     }
 
@@ -115,7 +140,7 @@ public class StaticServiceImpl implements StaticService {
     }
 
     @Override
-    public List<MemberClanDTO> getMembers(String nameClan){
+    public List<MemberClanDTO> getMembers(String nameClan) {
         var membersFromBD = topRepository.findAllByFactionName(nameClan);
 
         return membersFromBD.stream().map(members -> new MemberClanDTO(
@@ -126,8 +151,8 @@ public class StaticServiceImpl implements StaticService {
                 members.getHp(),
                 members.getMp(),
                 members.getPk_count()
-                )).collect(Collectors.toList());
-     }
+        )).collect(Collectors.toList());
+    }
 
     private String makeReadableTime(Long sec) {
         return String.format("%d:%02d:%02d", sec / 3600, sec % 3600 / 60, sec % 60);

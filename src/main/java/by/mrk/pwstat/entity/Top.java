@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -27,7 +29,7 @@ public class Top {
     private Integer rednametime;
     @ManyToOne()
     @JoinColumn(name = "factionid", referencedColumnName = "id")
-//    @Fetch(value = FetchMode.JOIN)
+    @Fetch(value = FetchMode.JOIN)
     @NotFound(action = NotFoundAction.IGNORE)
     private Clan factionid;
     private Short factionrole;
