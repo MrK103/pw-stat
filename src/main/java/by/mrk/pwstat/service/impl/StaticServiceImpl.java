@@ -77,8 +77,8 @@ public class StaticServiceImpl implements StaticService {
 
         Map<Top, Integer> maps = new LinkedHashMap<>();
 
-        for (int i = 0; i < 20; i++) {
-            maps.put(topUser.get(i), userOnline.get(topUser.get(i).getUserid()));
+        for (Top value : topUser) {
+            maps.put(value, userOnline.get(value.getUserid()));
         }
 //        var finish = Instant.now();
 //        var elapsed = Duration.between(start, finish).toMillis();
