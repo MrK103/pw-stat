@@ -37,25 +37,10 @@ public class StaticServiceImpl implements StaticService {
         var online = pointRepository.online(PointEnum.ONLINE.getId());
         var topList = topRepository.findAll();
 
-        System.out.println(topList.size());
         Map<String, Long> roles = new LinkedHashMap<>();
-
-        roles.put(RoleProfEnum.CLASS_0.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_0.getId())).count());
-        roles.put(RoleProfEnum.CLASS_1.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_1.getId())).count());
-        roles.put(RoleProfEnum.CLASS_2.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_2.getId())).count());
-        roles.put(RoleProfEnum.CLASS_3.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_3.getId())).count());
-        roles.put(RoleProfEnum.CLASS_4.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_4.getId())).count());
-        roles.put(RoleProfEnum.CLASS_5.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_5.getId())).count());
-        roles.put(RoleProfEnum.CLASS_6.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_6.getId())).count());
-        roles.put(RoleProfEnum.CLASS_7.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_7.getId())).count());
-        roles.put(RoleProfEnum.CLASS_8.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_8.getId())).count());
-        roles.put(RoleProfEnum.CLASS_9.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_9.getId())).count());
-        roles.put(RoleProfEnum.CLASS_10.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_10.getId())).count());
-        roles.put(RoleProfEnum.CLASS_11.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_11.getId())).count());
-        roles.put(RoleProfEnum.CLASS_12.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_12.getId())).count());
-        roles.put(RoleProfEnum.CLASS_13.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_13.getId())).count());
-        roles.put(RoleProfEnum.CLASS_14.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(RoleProfEnum.CLASS_14.getId())).count());
-
+        Arrays.stream(RoleProfEnum.values()).forEach(roleEnum -> {
+            roles.put(roleEnum.getName(), topList.stream().filter(top -> Integer.valueOf(top.getRoleprof()).equals(roleEnum.getId())).count());
+        });
 
         var genderList = topList.stream().map(Top::getRolegender).collect(Collectors.toList());
         var female = genderList.stream().filter(p -> p == 1).count();
@@ -91,6 +76,7 @@ public class StaticServiceImpl implements StaticService {
                 point -> Optional.ofNullable(point.getZoneId()).orElse(PointEnum.OFFLINE.getId())));
 
         Map<Top, Integer> maps = new LinkedHashMap<>();
+
         for (int i = 0; i < 20; i++) {
             maps.put(topUser.get(i), userOnline.get(topUser.get(i).getUserid()));
         }
@@ -145,7 +131,6 @@ public class StaticServiceImpl implements StaticService {
 
     @Override
     public List<MemberClanDTO> getMembers(String nameClan) {
-        System.out.println(nameClan);
         List<Top> membersFromBD;
         if (Objects.equals(nameClan, "hash34754567976567")) {
             membersFromBD = topRepository.findAllByFactionId(0);
@@ -167,10 +152,8 @@ public class StaticServiceImpl implements StaticService {
         return String.format("%d:%02d:%02d", sec / 3600, sec % 3600 / 60, sec % 60);
     }
 
-    @PostConstruct
-    void test() {
-        var test = getMembers("ежата");
-        test.forEach(t -> System.out.println(t.getName()));
-    }
-
+//    @PostConstruct
+//    public void getStat(){
+//        getStatistic();
+//    }
 }

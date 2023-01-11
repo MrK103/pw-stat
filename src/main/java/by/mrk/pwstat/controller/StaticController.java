@@ -14,39 +14,39 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/static")
+@RequestMapping("${url.api.static}")
 public class StaticController {
     private final StaticService service;
 
-    @GetMapping("/getTop")
+    @GetMapping("${url.api.static.getTop}")
     public ResponseEntity<List<TopDTO>> getTopStatistic() {
         var statistic = service.getTop();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
-    @GetMapping("/getStat")
+    @GetMapping("${url.api.static.getStat}")
     public ResponseEntity<StatisticDTO> getCountAccount() {
         var statistic = service.getStatistic();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
-    @GetMapping("/getClanStat")
+    @GetMapping("${url.api.static.getClanStat}")
     public ResponseEntity<List<ClanDTO>> getClanStat() {
         var statistic = service.getClanStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
-    @GetMapping("/getPCStat")
+    @GetMapping("${url.api.static.getPCStat}")
     public ResponseEntity<List<PCDTO>> getPCStat() {
         var statistic = service.getPCStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
-    @GetMapping("/getMembers/{id}")
-    public ResponseEntity<List<MemberClanDTO>> getPCStat(@PathVariable("id") String id) {
-        var statistic = service.getMembers(id);
+    @GetMapping("${url.api.static.getMembersByName}")
+    public ResponseEntity<List<MemberClanDTO>> getPCStat(@PathVariable("clanName") String name) {
+        var statistic = service.getMembers(name);
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
-    @GetMapping("/getDonateTop")
+    @GetMapping("${url.api.static.getDonateTop}")
     public ResponseEntity<List<DonateDTO>> getDonateTop() {
         var statistic = service.getDonateStat();
         return new ResponseEntity<>(statistic, HttpStatus.OK);

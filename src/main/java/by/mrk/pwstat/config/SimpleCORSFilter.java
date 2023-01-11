@@ -11,7 +11,6 @@ public class SimpleCORSFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         System.err.println("Stat req");
-
         HttpServletResponse response = (HttpServletResponse) res;
         //todo доступ из вне, поменять на url сайта
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -19,8 +18,6 @@ public class SimpleCORSFilter implements Filter {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
         chain.doFilter(req, res);
-        System.err.println("End req");
-
     }
 
     public void init(FilterConfig filterConfig) {}

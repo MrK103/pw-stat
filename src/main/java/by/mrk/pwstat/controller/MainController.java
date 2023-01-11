@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/main")
+@RequestMapping("${url.api.main}")
 @AllArgsConstructor
 public class MainController {
     private final MainService mainService;
 
-    @GetMapping("/getOnline")
+    @GetMapping("${url.api.main.getOnline}")
     public ResponseEntity<Integer> getOnline(){
         return  new ResponseEntity<>(mainService.getOnline(), HttpStatus.OK);
     }

@@ -23,6 +23,5 @@ public interface TopRepository extends JpaRepository<Top, Integer> {
 
     @Query(value = "select * FROM top t where t.factionid =:factionid" , nativeQuery = true)
     List<Top> findAllById(@Param(value = "factionid") Integer id);
-//    @Query(value = "SELECT * FROM top p ORDER BY p.rolelevel, p.pk_count desc LIMIT 20", nativeQuery = true)
-//    List<Top> getTop20Users();
+
 }
